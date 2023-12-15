@@ -15,7 +15,13 @@ async function addNote(newNote) {
     const db = client.db("usersSharing");
     const result = await db.collection("users").insertOne(newNote);
     return result;
-  } finally {
+  } 
+  catch (error) {
+    // Handle the error, log it, or rethrow it
+    console.error("Error in addNote:", error);
+    throw error;
+  } 
+  finally {
     client.close();
   }
 }
@@ -27,7 +33,12 @@ async function getNotes(query = {}) {
     const db = client.db("usersSharing");
     const notes = await db.collection("users").find(query).toArray();
     return notes;
-  } finally {
+  } 
+  catch (error) {
+    console.error("Error in getNotes:", error);
+    throw error;
+  }
+  finally {
     client.close();
   }
 }
@@ -41,7 +52,12 @@ async function getNoteById(noteId) {
       .collection("users")
       .findOne({ _id: ObjectId(noteId) });
     return note;
-  } finally {
+  } 
+  catch (error) {
+    console.error("Error in getNoteById:", error);
+    throw error;
+  }
+  finally {
     if (client) {
       client.close();
     }
@@ -57,7 +73,12 @@ async function updateNote(noteId, updatedNote) {
       .collection("users")
       .updateOne({ _id: new ObjectId(noteId) }, { $set: updatedNote });
     return result;
-  } finally {
+  } 
+  catch (error) {
+    console.error("Error in updateNote:", error);
+    throw error;
+  } 
+  finally {
     client.close();
   }
 }
@@ -72,7 +93,12 @@ async function deleteNote(noteId) {
       .deleteOne({ _id: new ObjectId(noteId) });
     console.log(result);
     return result;
-  } finally {
+  } 
+  catch (error) {
+    console.error("Error in deleteNote:", error);
+    throw error;
+  }
+  finally {
     client.close();
   }
 }
